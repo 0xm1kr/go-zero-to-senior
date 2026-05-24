@@ -1,0 +1,111 @@
+/*
+ * Lesson content area — title, description, key takeaways, prev/next nav.
+ */
+#content {
+  padding: 36px 48px 80px;
+  max-width: 920px;
+}
+#lesson-meta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+#lesson-category {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+#lesson-title {
+  margin: 0 0 18px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+#lesson-description h3 {
+  margin-top: 26px;
+  margin-bottom: 8px;
+  font-size: 17px;
+  color: var(--text-bright);
+}
+#lesson-description p { margin: 10px 0; }
+#lesson-description ul, #lesson-description ol { padding-left: 24px; }
+#lesson-description li { margin: 4px 0; }
+#lesson-description code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--bg-3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--accent-text);
+}
+#lesson-description pre {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--bg-2);
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+#lesson-description a { color: var(--accent-text); }
+#lesson-description table { font-size: 13px; margin-top: 6px; }
+
+#key-takeaways {
+  margin-top: 28px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--yellow);
+  border-radius: 6px;
+  padding: 14px 18px;
+}
+#key-takeaways h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+#key-takeaways ul { margin: 0; padding-left: 20px; }
+#key-takeaways li { margin: 3px 0; font-size: 14px; }
+
+#lesson-nav {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+#lesson-nav button {
+  background: var(--bg-3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+#lesson-nav button:hover:not(:disabled) {
+  border-color: var(--text-dim);
+}
+#lesson-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+#lesson-nav #mark-complete {
+  background: var(--accent);
+  color: #001b22;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+#lesson-nav #mark-complete:hover { background: var(--go-cyan-2); }
+#lesson-nav #mark-complete.done {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+@media (max-width: 900px) {
+  #content { padding: 24px 18px 60px; }
+}

@@ -1,0 +1,134 @@
+/*
+ * Playground — code editor, output panel, run/reset buttons.
+ */
+#playground {
+  margin-top: 32px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+.playground-head, .output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+}
+.output-head { border-top: 1px solid var(--border); }
+.playground-head h3, .output-head h3 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.playground-actions { display: flex; gap: 8px; }
+
+/* Plain-textarea fallback (used only when CodeMirror failed to load). */
+#code {
+  width: 100%;
+  min-height: 260px;
+  border: none;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.55;
+  padding: 14px 18px;
+  resize: vertical;
+  tab-size: 4;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+#code:focus { outline: none; }
+
+/* ── CodeMirror harmonization ───────────────────────────────────────────
+ * CodeMirror.fromTextArea hides #code and inserts a sibling .CodeMirror
+ * div. We restyle that div to match the app's design tokens and sizing.
+ * The vendored material-darker.css handles syntax colors in dark mode;
+ * the default theme handles light mode. We override the chrome around
+ * those (background, gutter, cursor, selection) so both modes feel
+ * native to the app.
+ *
+ * Sizing strategy: grow to fit the code. playground.js sets
+ * `viewportMargin: Infinity` so CodeMirror renders every line, and
+ * `height: auto` lets the .CodeMirror element follow. No max-height —
+ * we want the editor to behave like a static code block where the page
+ * does the scrolling, not the editor.
+ */
+.CodeMirror {
+  height: auto;
+  min-height: 220px;
+  /* Default CodeMirror CSS sets `overflow: hidden` here. With our auto-height
+   * strategy that still grows the box, but explicitly setting overflow
+   * documents the intent and makes layout debugging easier. */
+  overflow: visible;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.55;
+  background: var(--bg);
+  color: var(--text);
+}
+/* Override CodeMirror's default `overflow: scroll` so the inner scroller
+ * doesn't trap us inside a fixed-height pane. With height: auto on the
+ * parent, the scroller naturally sizes to its content. */
+.CodeMirror-scroll {
+  padding: 8px 4px 12px 0;
+  overflow-y: visible !important;
+}
+/* Long lines still need to scroll horizontally — only kill the vertical
+ * scrollbar gutter that overflow-y: scroll would reserve. */
+.CodeMirror-vscrollbar { display: none !important; }
+.CodeMirror-sizer { min-height: 0 !important; }
+.CodeMirror-gutters {
+  background: var(--bg-2);
+  border-right: 1px solid var(--border);
+}
+.CodeMirror-linenumber { color: var(--text-dim); }
+.CodeMirror-cursor { border-left-color: var(--text); }
+.CodeMirror-selected { background: var(--accent-bg, rgba(0, 173, 216, 0.18)) !important; }
+.CodeMirror-focused .CodeMirror-selected { background: var(--accent-bg, rgba(0, 173, 216, 0.28)) !important; }
+.CodeMirror-matchingbracket {
+  color: var(--green) !important;
+  border-bottom: 1px solid currentColor;
+}
+.CodeMirror-activeline-background { background: rgba(255, 255, 255, 0.03); }
+
+/* Light-mode override: the default CM theme is white-on-white; nudge it
+ * to use our token colors. */
+[data-theme="light"] .CodeMirror {
+  background: var(--bg);
+  color: var(--text);
+}
+[data-theme="light"] .CodeMirror-gutters {
+  background: var(--bg-2);
+}
+[data-theme="light"] .CodeMirror-activeline-background {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+#output {
+  margin: 0;
+  padding: 14px 18px;
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--code-bg);
+  color: var(--text);
+  min-height: 80px;
+  max-height: 360px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+#output .stderr { color: var(--red); }
+#output .error  { color: var(--yellow); }
+#output .meta   { color: var(--text-dim); font-style: italic; }
+
+#run-status { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+#run-status.running { color: var(--yellow); }
+#run-status.success { color: var(--green); }
+#run-status.error   { color: var(--red); }

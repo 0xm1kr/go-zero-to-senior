@@ -1,0 +1,65 @@
+/*
+ * Components — DRY rules for buttons and icon-buttons reused across the app.
+ * Specific surfaces (chat header, sidebar header, etc.) still set their own
+ * sizes, but the visual treatment lives here.
+ */
+
+/* Primary CTA — cyan filled. */
+.btn-primary {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-weight: 700;
+  background: var(--accent);
+  color: #001b22;
+}
+.btn-primary:hover { background: var(--go-cyan-2); }
+.btn-primary:disabled { opacity: 0.6; cursor: wait; }
+
+/* Secondary — outlined ghost. */
+.btn-ghost {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-dim);
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--text-dim); }
+
+/* Compact square icon button — used for theme toggle, chat header,
+ * chat close, clear-thread, etc. */
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.icon-btn:hover {
+  color: var(--text-bright);
+  border-color: var(--text-dim);
+  background: var(--bg-3);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* Smaller icon-button variant (e.g. chat header actions). */
+.icon-btn--sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+}
+.icon-btn--sm svg { width: 14px; height: 14px; }

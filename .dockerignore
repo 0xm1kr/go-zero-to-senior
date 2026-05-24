@@ -1,0 +1,33 @@
+# Anything that doesn't belong in the build context.
+# Keeps `docker build` fast and avoids leaking secrets.
+
+# Local dev / env
+.env
+.env.*
+!.env.example
+*.log
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Git
+.git/
+.gitignore
+.github/
+
+# CI / docs that don't change runtime behavior
+README.md
+LICENSE
+*.md
+
+# Tests aren't needed in the final image (Go's build doesn't ship them)
+*_test.go
+
+# Build artifacts
+gotut
+gotut-*
+dist/
+bin/
