@@ -21,9 +21,7 @@ COPY . .
 # - GOOS / GOARCH  : honor BuildKit's TARGETOS/TARGETARCH for multi-arch.
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg/mod \
-    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -trimpath -ldflags='-s -w' -o /out/golang-tut .
 
 # ─── Stage 2: minimal runtime ───────────────────────────────────────────────

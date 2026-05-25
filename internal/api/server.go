@@ -19,16 +19,23 @@ import (
 // Construct one via NewServer in main and call Handler() to mount it on
 // an http.Server.
 type Server struct {
-	Lessons lesson.Repository
-	Runner  runner.Runner // interface — backed by Local or Playground
-	Tutor   *tutor.Service
-	Static  fs.FS
+	Lessons      lesson.Repository
+	Runner       runner.Runner // interface — backed by Local or Playground
+	Tutor        *tutor.Service
+	ChatLimiter  *ChatLimiter
+	Static       fs.FS
 }
 
 // NewServer is a small convenience constructor.  The fields could also be
 // set directly; this just documents what's required.
 func NewServer(lessons lesson.Repository, r runner.Runner, t *tutor.Service, static fs.FS) *Server {
-	return &Server{Lessons: lessons, Runner: r, Tutor: t, Static: static}
+	return &Server{
+		Lessons:     lessons,
+		Runner:      r,
+		Tutor:       t,
+		ChatLimiter: NewChatLimiterFromEnv(),
+		Static:      static,
+	}
 }
 
 // Handler returns the fully-wired http.Handler with routes and middleware.

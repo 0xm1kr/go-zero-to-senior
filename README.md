@@ -94,6 +94,23 @@ Other supported variables:
 | `OPENAI_API_KEY` | _none_ | OpenAI |
 | `OPENAI_MODEL` | `gpt-4o-mini` | |
 
+### Chat abuse protection
+
+When AI chat is enabled on a public deployment, these limits apply per client IP
+(Cloud Run sets `X-Forwarded-For` automatically; set `TRUST_PROXY=1` behind other
+reverse proxies):
+
+| Variable | Default | Notes |
+| --- | --- | --- |
+| `CHAT_RATE_PER_MIN` | `5` | Burst limit; set `0` to disable |
+| `CHAT_RATE_DAILY` | `50` | Daily quota per IP; set `0` to disable |
+| `CHAT_MAX_MESSAGE_CHARS` | `4000` | Max characters per message |
+| `CHAT_MAX_CODE_CHARS` | `16000` | Max editor code sent with each turn |
+| `CHAT_MAX_BODY_BYTES` | `65536` | Max JSON body size for `/api/chat` |
+
+Exceeded limits return HTTP 429 with a `Retry-After` header. Limits are also
+exposed via `GET /api/chat/status` under `limits`.
+
 On startup the server logs which provider is active:
 
 ```

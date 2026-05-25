@@ -50,12 +50,23 @@ export async function fetchChatStatus() {
 }
 
 // sendChat posts one conversation turn (lesson id + current editor code +
-// full history) and returns the {message, error} envelope from the server.
+// full history) and returns the {message, error, retryAfter} envelope from
+// the server.
 export async function sendChat(lessonId, code, messages) {
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ lessonId, code, messages }),
   });
-  return res.json();
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 429) {
+    return {
+      error: data.error || 'rate limit exceeded',
+      retryAfter: data.retryAfter,
+    };
+  }
+  if (!res.ok && !data.error) {
+    return { error: `chat: ${res.status}` };
+  }
+  return data;
 }

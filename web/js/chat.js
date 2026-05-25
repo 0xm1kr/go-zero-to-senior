@@ -151,6 +151,13 @@ function appendThinking(container) {
   container.appendChild(el);
 }
 
+function formatRetry(seconds) {
+  if (!seconds || seconds <= 0) return 'a moment';
+  if (seconds < 60) return `${seconds}s`;
+  if (seconds < 3600) return `${Math.ceil(seconds / 60)}m`;
+  return `${Math.ceil(seconds / 3600)}h`;
+}
+
 // updateMeta refreshes the small label under the chat input showing the
 // active provider/model (or a "no key configured" hint).
 function updateMeta() {
@@ -158,7 +165,11 @@ function updateMeta() {
   const s = state.chat.status;
   if (!s) { meta.textContent = ''; return; }
   if (s.available) {
-    meta.textContent = `${s.provider} · ${s.model}`;
+    const limits = s.limits;
+    const limitHint = limits
+      ? ` · ${limits.perMinute}/min · ${limits.daily}/day`
+      : '';
+    meta.textContent = `${s.provider} · ${s.model}${limitHint}`;
     meta.classList.remove('error');
   } else {
     meta.textContent = 'no key configured';
@@ -190,7 +201,11 @@ async function send() {
       history,
     );
     if (data.error) {
-      history.push({ role: 'assistant', content: ERROR_SENTINEL + data.error });
+      let msg = data.error;
+      if (data.retryAfter) {
+        msg += `\n\nTry again in ${formatRetry(data.retryAfter)}.`;
+      }
+      history.push({ role: 'assistant', content: ERROR_SENTINEL + msg });
     } else if (data.message?.content) {
       history.push({ role: 'assistant', content: data.message.content });
     } else {
